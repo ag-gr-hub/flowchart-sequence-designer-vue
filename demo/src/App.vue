@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { FsdDiagram, FsdSequence } from "@flowchart-sequence-designer/vue";
+import { presetFlowchartModel, presetSequenceModel } from "flowchart-sequence-designer/ui";
+import type { DiagramModel } from "flowchart-sequence-designer/ui";
 import DocsTab from "./DocsTab.vue";
 
 type Tab = "flowchart" | "question" | "journey" | "sequence" | "docs";
@@ -19,8 +21,14 @@ const variant = computed(() => {
   return "flowchart" as const;
 });
 
+const flowchartModel = ref<DiagramModel>(presetFlowchartModel("flowchart"));
+const sequenceModel = ref<DiagramModel>(presetSequenceModel());
+
 function switchTab(t: Tab) {
   tab.value = t;
+  if (t !== "sequence" && t !== "docs") {
+    flowchartModel.value = presetFlowchartModel(t);
+  }
 }
 </script>
 
@@ -76,12 +84,15 @@ function switchTab(t: Tab) {
     <DocsTab v-if="tab === 'docs'" />
     <FsdSequence
       v-else-if="tab === 'sequence'"
+      :model-value="sequenceModel"
       :height="editorHeight"
       :theme="theme"
       :allow-import="true"
     />
     <FsdDiagram
       v-else
+      :key="tab"
+      :model-value="flowchartModel"
       :height="editorHeight"
       :variant="variant"
       :theme="theme"
