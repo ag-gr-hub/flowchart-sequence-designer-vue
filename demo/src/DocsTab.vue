@@ -60,7 +60,7 @@
       <!-- Install -->
       <section id="install">
         <h2>Install</h2>
-        <div class="code-block"><code>npm install @flowchart-sequence-designer/vue flowchart-sequence-designer react react-dom</code></div>
+        <pre class="code-block"><code>npm install @flowchart-sequence-designer/vue flowchart-sequence-designer react react-dom</code></pre>
         <p class="docs-note">Peer dependencies: Vue 3.3+, flowchart-sequence-designer, react, react-dom. The core API has zero runtime dependencies.</p>
         <p>Four diagram types ship in one package — pick the one that fits the story you're telling. Each gets its own deep-dive guide below.</p>
       </section>
@@ -68,7 +68,7 @@
       <!-- Quick Start -->
       <section id="quick-start">
         <h2>Quick Start</h2>
-        <div class="code-block"><code><span class="kw">import</span> { ref } <span class="kw">from</span> <span class="str">'vue'</span>;
+        <pre class="code-block"><code><span class="kw">import</span> { ref } <span class="kw">from</span> <span class="str">'vue'</span>;
 <span class="kw">import</span> { FsdDiagram } <span class="kw">from</span> <span class="str">'@flowchart-sequence-designer/vue'</span>;
 <span class="kw">import type</span> { DiagramModel } <span class="kw">from</span> <span class="str">'flowchart-sequence-designer'</span>;
 
@@ -81,7 +81,7 @@
     height="600"
     theme="auto"
   /&gt;
-&lt;/template&gt;</code></div>
+&lt;/template&gt;</code></pre>
         <p>That's it — no provider, no theme setup, no required props. The editor mounts with a sample diagram, a working toolbar, undo/redo, drag-to-pan, scroll-to-zoom, and export buttons.</p>
       </section>
 
@@ -89,32 +89,32 @@
       <section id="flowchart-guide">
         <h2>Flowchart</h2>
         <p>General purpose — any shapes, freeform connections. Use this variant for process diagrams, decision trees, system architectures, or any graph where nodes connect freely. Supports rectangle, diamond, circle, and parallelogram shapes.</p>
-        <div class="code-block"><code>&lt;FsdDiagram variant="flowchart" /&gt;</code></div>
+        <pre class="code-block"><code>&lt;FsdDiagram variant="flowchart" /&gt;</code></pre>
       </section>
 
       <section id="question-guide">
         <h2>Question Flow</h2>
         <p>Each node is a question with lettered answer options (A, B, C…). Each answer has its own connection port, so you can route specific answers to specific nodes. Perfect for surveys, quizzes, decision wizards, and branching logic.</p>
-        <div class="code-block"><code>&lt;FsdDiagram variant="question" /&gt;</code></div>
+        <pre class="code-block"><code>&lt;FsdDiagram variant="question" /&gt;</code></pre>
       </section>
 
       <section id="journey-guide">
         <h2>Journey Map</h2>
         <p>Numbered milestone steps — user path or process walkthrough. Nodes are auto-numbered and connected in sequence. Great for user journeys, onboarding flows, and step-by-step processes.</p>
-        <div class="code-block"><code>&lt;FsdDiagram variant="journey" /&gt;</code></div>
+        <pre class="code-block"><code>&lt;FsdDiagram variant="journey" /&gt;</code></pre>
       </section>
 
       <section id="sequence-guide">
         <h2>Sequence Diagram</h2>
         <p>Actor lifelines with ordered messages between them. Actors are displayed as columns with messages drawn as arrows between lifelines. Supports solid and dashed message styles. Drag message rows to reorder, drag actor columns to rearrange lifelines.</p>
-        <div class="code-block"><code>&lt;FsdSequence theme="auto" @update:model-value="onModelChange" /&gt;</code></div>
+        <pre class="code-block"><code>&lt;FsdSequence theme="auto" @update:model-value="onModelChange" /&gt;</code></pre>
       </section>
 
       <!-- Builder APIs -->
       <section id="flowchart-api">
         <h2>flowchart() — builder reference</h2>
         <p>Build a diagram with a fluent chainable API. Nodes and edges are validated at call time.</p>
-        <div class="code-block"><code><span class="kw">import</span> { flowchart } <span class="kw">from</span> <span class="str">'flowchart-sequence-designer'</span>;
+        <pre class="code-block"><code><span class="kw">import</span> { flowchart } <span class="kw">from</span> <span class="str">'flowchart-sequence-designer'</span>;
 
 <span class="kw">const</span> diagram = flowchart(<span class="str">'Order Flow'</span>)
   .node(<span class="str">'start'</span>,   <span class="str">'Start'</span>,          { shape: <span class="str">'circle'</span> })
@@ -125,7 +125,7 @@
   .edge(<span class="str">'check'</span>,   <span class="str">'success'</span>, { label: <span class="str">'Yes'</span> })
   .edge(<span class="str">'check'</span>,   <span class="str">'fail'</span>,    { label: <span class="str">'No'</span> });
 
-console.log(diagram.toMermaid());</code></div>
+console.log(diagram.toMermaid());</code></pre>
 
         <h3>Node shapes</h3>
         <table class="props-table">
@@ -137,17 +137,17 @@ console.log(diagram.toMermaid());</code></div>
         </table>
 
         <h3>Edge options</h3>
-        <div class="code-block"><code>.edge(from, to, {
+        <pre class="code-block"><code>.edge(from, to, {
   label?: <span class="kw">string</span>,
   style?: <span class="str">'solid'</span> | <span class="str">'dashed'</span> | <span class="str">'dotted'</span>,
   arrowhead?: <span class="str">'arrow'</span> | <span class="str">'open'</span> | <span class="str">'none'</span>,
-})</code></div>
+})</code></pre>
       </section>
 
       <section id="sequence-api">
         <h2>sequence() — builder reference</h2>
         <p>Model actor-to-actor message flows. Actors auto-register from <code>.message()</code> calls — you can skip <code>.actor()</code> if you prefer.</p>
-        <div class="code-block"><code><span class="kw">import</span> { sequence } <span class="kw">from</span> <span class="str">'flowchart-sequence-designer'</span>;
+        <pre class="code-block"><code><span class="kw">import</span> { sequence } <span class="kw">from</span> <span class="str">'flowchart-sequence-designer'</span>;
 
 <span class="kw">const</span> diagram = sequence(<span class="str">'Auth Flow'</span>)
   .actor(<span class="str">'User'</span>)
@@ -155,13 +155,13 @@ console.log(diagram.toMermaid());</code></div>
   .message(<span class="str">'User'</span>,   <span class="str">'Server'</span>, <span class="str">'POST /login'</span>)
   .message(<span class="str">'Server'</span>, <span class="str">'User'</span>,   <span class="str">'200 OK + token'</span>, { style: <span class="str">'dashed'</span> });
 
-console.log(diagram.toMermaid());</code></div>
+console.log(diagram.toMermaid());</code></pre>
       </section>
 
       <section id="model-api">
         <h2>Model — low-level API</h2>
         <p>Work directly with the mutable graph model when you need fine-grained control — useful for incremental updates or building on top of the library.</p>
-        <div class="code-block"><code><span class="kw">import</span> { Model } <span class="kw">from</span> <span class="str">'flowchart-sequence-designer'</span>;
+        <pre class="code-block"><code><span class="kw">import</span> { Model } <span class="kw">from</span> <span class="str">'flowchart-sequence-designer'</span>;
 <span class="kw">import type</span> { DiagramModel } <span class="kw">from</span> <span class="str">'flowchart-sequence-designer'</span>;
 
 <span class="kw">const</span> m = <span class="kw">new</span> Model({ type: <span class="str">'flowchart'</span>, nodes: [], edges: [] });
@@ -169,30 +169,30 @@ m.addNode({ id: <span class="str">'a'</span>, label: <span class="str">'Step A'<
 m.addNode({ id: <span class="str">'b'</span>, label: <span class="str">'Step B'</span>, shape: <span class="str">'rectangle'</span> });
 m.addEdge({ id: <span class="str">'e1'</span>, from: <span class="str">'a'</span>, to: <span class="str">'b'</span>, label: <span class="str">'next'</span> });
 
-console.log(m.toMermaid());</code></div>
+console.log(m.toMermaid());</code></pre>
       </section>
 
       <!-- Import -->
       <section id="import">
         <h2>Import</h2>
         <p>Parse existing Mermaid or JSON into a live model. Round-trip fidelity is guaranteed: <code>fromMermaid(diagram.toMermaid())</code> produces an equivalent model. The editor's Import button opens a modal with paste + file upload that calls these under the hood.</p>
-        <div class="code-block"><code><span class="kw">import</span> { fromMermaid, fromJSON } <span class="kw">from</span> <span class="str">'flowchart-sequence-designer'</span>;
+        <pre class="code-block"><code><span class="kw">import</span> { fromMermaid, fromJSON } <span class="kw">from</span> <span class="str">'flowchart-sequence-designer'</span>;
 
 <span class="kw">const</span> model = fromMermaid(<span class="str">'graph TD; A--&gt;B; B--&gt;C'</span>);
-<span class="kw">const</span> model2 = fromJSON(jsonString);</code></div>
+<span class="kw">const</span> model2 = fromJSON(jsonString);</code></pre>
         <p>Feed imported models directly into the Vue component:</p>
-        <div class="code-block"><code>&lt;FsdDiagram :model-value="importedModel" /&gt;</code></div>
+        <pre class="code-block"><code>&lt;FsdDiagram :model-value="importedModel" /&gt;</code></pre>
       </section>
 
       <!-- Export formats -->
       <section id="export">
         <h2>Export formats</h2>
         <p>Every builder exposes the same export methods. <code>toPNG()</code> is browser-only (uses the Canvas API).</p>
-        <div class="code-block"><code>diagram.toMermaid()   <span class="kw">// → string</span>
+        <pre class="code-block"><code>diagram.toMermaid()   <span class="kw">// → string</span>
 diagram.toPlantUML()  <span class="kw">// → string</span>
 diagram.toJSON()      <span class="kw">// → string (serialised DiagramModel)</span>
 diagram.toSVG()       <span class="kw">// → string (SVG markup)</span>
-diagram.toPNG()       <span class="kw">// → Promise&lt;Blob&gt; (browser only)</span></code></div>
+diagram.toPNG()       <span class="kw">// → Promise&lt;Blob&gt; (browser only)</span></code></pre>
 
         <h3>Round-trip rules</h3>
         <p>The five formats trade fidelity for portability. Use this table to pick the one that matches what you need.</p>
@@ -213,7 +213,7 @@ diagram.toPNG()       <span class="kw">// → Promise&lt;Blob&gt; (browser only)
       <section id="presets">
         <h2>Presets &amp; empty models</h2>
         <p>The editor mounts with a real working diagram so consumers immediately see styled nodes and edges. Reach for <code>emptyModel(type)</code> to start blank, or call a <code>preset*Model()</code> helper from your own code to hydrate the same example data.</p>
-        <div class="code-block"><code><span class="kw">import</span> {
+        <pre class="code-block"><code><span class="kw">import</span> {
   presetFlowchartModel,
   presetSequenceModel,
   emptyModel,
@@ -226,7 +226,7 @@ presetSequenceModel()              <span class="kw">// 3-actor login handshake</
 
 emptyModel(<span class="str">'flowchart'</span>)            <span class="kw">// blank flowchart</span>
 emptyModel(<span class="str">'flowchart'</span>, <span class="str">'journey'</span>) <span class="kw">// blank journey-variant flowchart</span>
-emptyModel(<span class="str">'sequence'</span>)             <span class="kw">// blank sequence diagram</span></code></div>
+emptyModel(<span class="str">'sequence'</span>)             <span class="kw">// blank sequence diagram</span></code></pre>
         <p>All presets return a deep clone — mutate the result freely without affecting future calls.</p>
       </section>
 
@@ -234,7 +234,7 @@ emptyModel(<span class="str">'sequence'</span>)             <span class="kw">// 
       <section id="vue-ui">
         <h2>Vue UI component</h2>
         <p>Import from <code>@flowchart-sequence-designer/vue</code>. The component is a self-contained SVG canvas — no additional CSS import needed.</p>
-        <div class="code-block"><code><span class="kw">import</span> { FsdDiagram } <span class="kw">from</span> <span class="str">'@flowchart-sequence-designer/vue'</span>;
+        <pre class="code-block"><code><span class="kw">import</span> { FsdDiagram } <span class="kw">from</span> <span class="str">'@flowchart-sequence-designer/vue'</span>;
 
 <span class="kw">// Drop it anywhere — works with zero config</span>
 &lt;FsdDiagram /&gt;
@@ -251,7 +251,7 @@ emptyModel(<span class="str">'sequence'</span>)             <span class="kw">// 
   theme="dark"
   :allowed-exports="['json', 'svg']"
   :allow-import="false"
-/&gt;</code></div>
+/&gt;</code></pre>
 
         <h3>Variants</h3>
         <table class="props-table">
@@ -292,7 +292,7 @@ emptyModel(<span class="str">'sequence'</span>)             <span class="kw">// 
       <section id="theming">
         <h2>Theming</h2>
         <p>The editor ships with a slate-based light/dark palette and follows the OS preference by default. To brand-match without forking, pass <code>:theme-overrides</code> — a <code>Partial&lt;ThemeColors&gt;</code> shallow-merged on top of the resolved palette.</p>
-        <div class="code-block"><code><span class="kw">import</span> { ref } <span class="kw">from</span> <span class="str">'vue'</span>;
+        <pre class="code-block"><code><span class="kw">import</span> { ref } <span class="kw">from</span> <span class="str">'vue'</span>;
 <span class="kw">import</span> { FsdDiagram } <span class="kw">from</span> <span class="str">'@flowchart-sequence-designer/vue'</span>;
 <span class="kw">import type</span> { ThemeColors } <span class="kw">from</span> <span class="str">'flowchart-sequence-designer/ui'</span>;
 
@@ -305,7 +305,7 @@ emptyModel(<span class="str">'sequence'</span>)             <span class="kw">// 
   textPrimary: <span class="str">'#e6edf7'</span>,
 };
 
-&lt;FsdDiagram theme="dark" :theme-overrides="brand" /&gt;</code></div>
+&lt;FsdDiagram theme="dark" :theme-overrides="brand" /&gt;</code></pre>
 
         <h3>ThemeColors tokens (flowchart)</h3>
         <table class="props-table">
@@ -402,7 +402,7 @@ emptyModel(<span class="str">'sequence'</span>)             <span class="kw">// 
       <!-- Types -->
       <section id="types">
         <h2>TypeScript Types</h2>
-        <div class="code-block"><code><span class="kw">import type</span> {
+        <pre class="code-block"><code><span class="kw">import type</span> {
   DiagramModel,
   DiagramNode,
   DiagramEdge,
@@ -416,10 +416,10 @@ emptyModel(<span class="str">'sequence'</span>)             <span class="kw">// 
 <span class="kw">import type</span> {
   ThemeColors,
   SequenceThemeColors,
-} <span class="kw">from</span> <span class="str">'flowchart-sequence-designer/ui'</span>;</code></div>
+} <span class="kw">from</span> <span class="str">'flowchart-sequence-designer/ui'</span>;</code></pre>
 
         <h3>DiagramModel</h3>
-        <div class="code-block"><code><span class="kw">interface</span> DiagramModel {
+        <pre class="code-block"><code><span class="kw">interface</span> DiagramModel {
   type: <span class="str">'flowchart'</span> | <span class="str">'sequence'</span>;
   variant?: DiagramVariant;
   title?: <span class="kw">string</span>;
@@ -427,10 +427,10 @@ emptyModel(<span class="str">'sequence'</span>)             <span class="kw">// 
   edges: DiagramEdge[];
   actors?: <span class="kw">string</span>[];           <span class="kw">// sequence only</span>
   messages?: SequenceMessage[]; <span class="kw">// sequence only</span>
-}</code></div>
+}</code></pre>
 
         <h3>DiagramNode</h3>
-        <div class="code-block"><code><span class="kw">interface</span> DiagramNode {
+        <pre class="code-block"><code><span class="kw">interface</span> DiagramNode {
   id: <span class="kw">string</span>;
   label: <span class="kw">string</span>;
   shape?: NodeShape;
@@ -438,10 +438,10 @@ emptyModel(<span class="str">'sequence'</span>)             <span class="kw">// 
   y?: <span class="kw">number</span>;
   metadata?: Record&lt;<span class="kw">string</span>, unknown&gt;;
   <span class="kw">// question variant: metadata.answers = string[]</span>
-}</code></div>
+}</code></pre>
 
         <h3>DiagramEdge</h3>
-        <div class="code-block"><code><span class="kw">interface</span> DiagramEdge {
+        <pre class="code-block"><code><span class="kw">interface</span> DiagramEdge {
   id: <span class="kw">string</span>;
   from: <span class="kw">string</span>;
   to: <span class="kw">string</span>;
@@ -449,16 +449,16 @@ emptyModel(<span class="str">'sequence'</span>)             <span class="kw">// 
   style?: <span class="str">'solid'</span> | <span class="str">'dashed'</span> | <span class="str">'dotted'</span>;
   arrowhead?: <span class="str">'arrow'</span> | <span class="str">'none'</span> | <span class="str">'open'</span>;
   waypoint?: { x: <span class="kw">number</span>; y: <span class="kw">number</span> };
-}</code></div>
+}</code></pre>
 
         <h3>SequenceMessage</h3>
-        <div class="code-block"><code><span class="kw">interface</span> SequenceMessage {
+        <pre class="code-block"><code><span class="kw">interface</span> SequenceMessage {
   id: <span class="kw">string</span>;
   from: <span class="kw">string</span>;
   to: <span class="kw">string</span>;
   label: <span class="kw">string</span>;
   style?: <span class="str">'solid'</span> | <span class="str">'dashed'</span>;
-}</code></div>
+}</code></pre>
       </section>
     </div>
   </main>
