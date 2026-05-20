@@ -57,7 +57,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-vue": "^6.0.7",
     "@vue/test-utils": "^2.4.0",
-    "eslint": "^9.0.0",
+    "eslint": "^10.4.0",
     "flowchart-sequence-designer": "^1.2.4",
     "happy-dom": "^20.9.0",
     "react": "^18.3.0",
