@@ -27,6 +27,9 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            demo/package-lock.json
 
       - name: Install library deps
         run: npm ci
@@ -42,9 +45,9 @@ jobs:
         working-directory: demo
         run: npm run build -- --base /flowchart-sequence-designer-vue/
 
-      - uses: actions/upload-pages-artifact@v5
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: demo/dist
 
       - id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4
