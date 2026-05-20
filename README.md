@@ -1,38 +1,13 @@
 # @flowchart-sequence-designer/vue
 
-[![npm version](https://img.shields.io/npm/v/@flowchart-sequence-designer/vue.svg)](https://www.npmjs.com/package/@flowchart-sequence-designer/vue)
-[![CI](https://github.com/ag-gr-hub/flowchart-sequence-designer-vue/actions/workflows/test.yml/badge.svg)](https://github.com/ag-gr-hub/flowchart-sequence-designer-vue/actions/workflows/test.yml)
+[![npm](https://img.shields.io/npm/v/@flowchart-sequence-designer/vue)](https://www.npmjs.com/package/@flowchart-sequence-designer/vue)
+[![CI](https://github.com/ag-gr-hub/flowchart-sequence-designer-vue/actions/workflows/test.yml/badge.svg)](https://github.com/ag-gr-hub/flowchart-sequence-designer-vue/actions)
 [![CodeQL](https://github.com/ag-gr-hub/flowchart-sequence-designer-vue/actions/workflows/codeql.yml/badge.svg)](https://github.com/ag-gr-hub/flowchart-sequence-designer-vue/actions/workflows/codeql.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-Vue 3 wrapper components for [flowchart-sequence-designer](https://www.npmjs.com/package/flowchart-sequence-designer) — a visual editor for flowcharts, question flows, journey maps, and sequence diagrams.
+Vue 3 wrapper for [flowchart-sequence-designer](https://www.npmjs.com/package/flowchart-sequence-designer) — embed the full-featured flowchart & sequence-diagram editor in Vue apps using Composition API components with full v-model support.
 
-**[▶ Live Demo](https://ag-gr-hub.github.io/flowchart-sequence-designer-vue/)**
-
----
-
-## Framework Wrappers
-
-| Framework | Package | Demo |
-|-----------|---------|------|
-| React (core) | [`flowchart-sequence-designer`](https://www.npmjs.com/package/flowchart-sequence-designer) | [Demo](https://ag-gr-hub.github.io/flowchart-sequence-designer/) |
-| Angular | [`@flowchart-sequence-designer/angular`](https://www.npmjs.com/package/@flowchart-sequence-designer/angular) | [Demo](https://ag-gr-hub.github.io/flowchart-sequence-designer-angular/) |
-| **Vue** | **`@flowchart-sequence-designer/vue`** | **[Demo](https://ag-gr-hub.github.io/flowchart-sequence-designer-vue/)** |
-
----
-
-## Features
-
-- 🎨 **Four editor variants** — Flowchart, Question Flow, Journey Map, Sequence
-- 🔄 **Full v-model support** — two-way data binding with Vue's reactivity
-- 🌙 **Theming** — Light, dark, and auto modes with custom color overrides
-- 📦 **Tree-shakeable** — ESM + CJS dual build, import only what you need
-- 🔒 **TypeScript-first** — Full type definitions for all components and props
-- ⚡ **Lazy-loaded** — Editor code-split for optimal bundle size
-- 📱 **Touch-friendly** — Pinch-to-zoom, gesture support
-- ♿ **Accessible** — Keyboard navigation, ARIA labels, screen reader support
-
----
+**🔗 [Live demo & developer docs →](https://ag-gr-hub.github.io/flowchart-sequence-designer-vue/)**
+Open it to drive the editor, switch variants (Flowchart / Question / Journey / Sequence), and explore the docs tab for API snippets. Every variant boots with a working sample diagram so you can poke without any setup.
 
 ## Installation
 
@@ -40,18 +15,20 @@ Vue 3 wrapper components for [flowchart-sequence-designer](https://www.npmjs.com
 npm install @flowchart-sequence-designer/vue flowchart-sequence-designer react react-dom
 ```
 
-### Peer Dependencies
-
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `vue` | ≥3.3.0 | Vue 3 runtime |
-| `flowchart-sequence-designer` | ≥1.2.0 | Core editor engine + React UI |
-| `react` | ≥18.0.0 | React runtime (used internally by editor) |
-| `react-dom` | ≥18.0.0 | React DOM renderer |
+Vue 3.3+ is required. The core API has zero runtime dependencies; React 18+ is a peer dependency for the visual editor.
 
 > 💡 **Why React?** The editor is built with React. This wrapper embeds it inside Vue using a bridge pattern. React is loaded once and shared — it doesn't bloat your bundle if you're already using it elsewhere.
 
----
+## Components
+
+| Component | Description |
+|-----------|-------------|
+| `<FsdDiagram>` | Full diagram editor (flowchart/question/journey) |
+| `<FsdSequence>` | Sequence diagram editor |
+| `<FsdToolbar>` | Standalone export/import toolbar |
+| `<FsdStepEditor>` | Node property editor panel |
+
+All components use `<script setup>` and support Vue's v-model pattern out of the box.
 
 ## Quick Start
 
@@ -59,14 +36,14 @@ npm install @flowchart-sequence-designer/vue flowchart-sequence-designer react r
 
 ```vue
 <script setup lang="ts">
-import { ref } from "vue";
-import { FsdDiagram } from "@flowchart-sequence-designer/vue";
-import type { DiagramModel } from "flowchart-sequence-designer";
+import { ref } from 'vue';
+import { FsdDiagram } from '@flowchart-sequence-designer/vue';
+import type { DiagramModel } from 'flowchart-sequence-designer';
 
 const model = ref<DiagramModel | undefined>();
 
-function handleChange(newModel: DiagramModel) {
-  console.log("Model updated:", newModel.nodes.length, "nodes");
+function onModelChange(newModel: DiagramModel) {
+  console.log('Model updated:', newModel.nodes.length, 'nodes');
 }
 </script>
 
@@ -76,160 +53,52 @@ function handleChange(newModel: DiagramModel) {
     variant="flowchart"
     height="600"
     theme="auto"
-    @update:model-value="handleChange"
+    @update:model-value="onModelChange"
   />
 </template>
 ```
 
-### Options API
+That's it — no provider, no theme setup, no required props. The editor
+mounts with a sample diagram, a working toolbar, undo/redo, drag-to-pan,
+scroll-to-zoom, and export buttons for Mermaid / PlantUML / JSON / SVG /
+PNG. Pass `theme="dark"` or `:theme-overrides="brandColors"` to
+brand-match, or `:model-value="emptyModel('flowchart')"` to start blank.
 
-```vue
-<template>
-  <FsdDiagram
-    :model-value="model"
-    variant="flowchart"
-    height="600"
-    @update:model-value="model = $event"
-  />
-</template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import { FsdDiagram } from "@flowchart-sequence-designer/vue";
-
-export default defineComponent({
-  components: { FsdDiagram },
-  data() {
-    return { model: undefined };
-  },
-});
-</script>
-```
-
-### Sequence Diagram
+### Sequence Diagram Editor
 
 ```vue
 <script setup lang="ts">
-import { FsdSequence } from "@flowchart-sequence-designer/vue";
+import { FsdSequence } from '@flowchart-sequence-designer/vue';
+import { presetSequenceModel } from 'flowchart-sequence-designer/ui';
+
+const model = presetSequenceModel();
 </script>
 
 <template>
-  <FsdSequence height="500px" theme="dark" />
+  <FsdSequence :model-value="model" height="500" theme="auto" />
 </template>
 ```
 
----
+### Using with an Initial Model
 
-## Components
+```typescript
+import { presetFlowchartModel, emptyModel } from 'flowchart-sequence-designer/ui';
 
-| Component | Description |
-|-----------|-------------|
-| `<FsdDiagram>` | Flowchart / Question Flow / Journey Map editor |
-| `<FsdSequence>` | Sequence diagram editor |
-| `<FsdToolbar>` | Standalone export/import toolbar |
-| `<FsdStepEditor>` | Node property editor panel |
+// Pre-built flowchart with sample nodes
+const flowchart = presetFlowchartModel('flowchart');
 
----
-
-## API Reference
-
-### `<FsdDiagram>`
-
-The main editor component supporting three diagram variants.
-
-#### Props
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `modelValue` | `DiagramModel` | `undefined` | Diagram data (v-model) |
-| `height` | `string \| number` | `"500px"` | Editor height (px, %, vh, calc()) |
-| `variant` | `"flowchart" \| "question-flow" \| "journey-map"` | `"flowchart"` | Editor mode |
-| `theme` | `"light" \| "dark" \| "auto"` | `"auto"` | Color theme |
-| `themeOverrides` | `Partial<ThemeColors>` | `undefined` | Custom color tokens |
-| `allowImport` | `boolean` | `true` | Show import button |
-| `allowedExports` | `ExportFormat[]` | all formats | Available export formats |
-
-#### Events
-
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `update:modelValue` | `DiagramModel` | Emitted on every diagram change (v-model) |
-| `export` | `{ format: ExportFormat; content: string \| Blob }` | Emitted when user exports |
-
----
-
-### `<FsdSequence>`
-
-Sequence diagram editor.
-
-#### Props
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `modelValue` | `DiagramModel` | `undefined` | Sequence data (v-model) |
-| `height` | `string \| number` | `"500px"` | Editor height |
-| `theme` | `"light" \| "dark" \| "auto"` | `"auto"` | Color theme |
-| `themeOverrides` | `Partial<ThemeColors>` | `undefined` | Custom colors |
-| `allowImport` | `boolean` | `true` | Show import |
-| `allowedExports` | `ExportFormat[]` | all | Export formats |
-
-#### Events
-
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `update:modelValue` | `DiagramModel` | Model changed (v-model) |
-| `export` | `{ format, content }` | User exported |
-
----
-
-### `<FsdToolbar>`
-
-Standalone toolbar for export/import controls.
-
-#### Props
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `allowedExports` | `ExportFormat[]` | all | Available exports |
-| `allowImport` | `boolean` | `true` | Show import button |
-
-#### Events
-
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `exportRequest` | `ExportFormat` | Export button clicked |
-| `importRequest` | — | Import button clicked |
-
----
-
-### `<FsdStepEditor>`
-
-Panel for editing properties of a selected node.
-
-#### Props
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `nodeId` | `string` | **required** | ID of node to edit |
-| `model` | `DiagramModel` | **required** | Current diagram model |
-| `variant` | `string` | `undefined` | Editor variant |
-| `isDark` | `boolean` | `false` | Dark mode flag |
-| `themeColors` | `ThemeColors` | `undefined` | Color overrides |
-
-#### Events
-
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `update:model` | `DiagramModel` | Model updated from property change |
+// Empty model of any type
+const blank = emptyModel('flowchart', 'question');
+```
 
 ---
 
 ## v-model Support
 
-Both `<FsdDiagram>` and `<FsdSequence>` support Vue's v-model pattern:
+Both `<FsdDiagram>` and `<FsdSequence>` support Vue's v-model:
 
 ```vue
-<!-- Two-way binding with v-model -->
+<!-- Two-way binding -->
 <FsdDiagram v-model="diagramModel" variant="flowchart" />
 
 <!-- Equivalent expanded form -->
@@ -243,238 +112,518 @@ When the user edits the diagram, the component emits `update:modelValue` with th
 
 ---
 
+## Programmatic API
+
+The core library (`flowchart-sequence-designer`) exposes a fluent builder API, import/export functions, and a low-level Model class. Import them directly from the core package.
+
+### Flowchart builder
+
+```typescript
+import { flowchart } from 'flowchart-sequence-designer';
+
+const diagram = flowchart('Order Flow')
+  .node('start',   'Start',           { shape: 'circle' })
+  .node('check',   'Payment valid?',  { shape: 'diamond' })
+  .node('success', 'Confirm order',   { shape: 'rectangle' })
+  .node('fail',    'Reject',          { shape: 'rectangle' })
+  .edge('start',   'check')
+  .edge('check',   'success', { label: 'Yes' })
+  .edge('check',   'fail',    { label: 'No' });
+
+console.log(diagram.toMermaid());
+```
+
+#### Node shapes
+
+| Shape | Description |
+|---|---|
+| `rectangle` | Standard process box (default) |
+| `diamond` | Decision / branch |
+| `circle` | Start or end terminal |
+| `parallelogram` | Input / output |
+
+#### Edge options
+
+```typescript
+.edge(from, to, {
+  label?: string,
+  style?: 'solid' | 'dashed' | 'dotted',
+  arrowhead?: 'arrow' | 'open' | 'none',
+})
+```
+
+---
+
+### Sequence diagram builder
+
+```typescript
+import { sequence } from 'flowchart-sequence-designer';
+
+const diagram = sequence('Auth Flow')
+  .actor('User')
+  .actor('Server')
+  .message('User',   'Server', 'POST /login')
+  .message('Server', 'User',   '200 OK + token', { style: 'dashed' });
+
+console.log(diagram.toMermaid());
+```
+
+Actors auto-register from `message()` calls, so you can skip `.actor()` if you prefer.
+
+---
+
+### Export formats
+
+Every builder exposes the same export methods:
+
+```typescript
+diagram.toMermaid()   // string
+diagram.toPlantUML()  // string
+diagram.toJSON()      // string (serialised DiagramModel)
+diagram.toSVG()       // string (SVG markup)
+diagram.toPNG()       // Promise<Blob>  (browser only)
+```
+
+---
+
+### Import
+
+```typescript
+import { fromMermaid, fromJSON } from 'flowchart-sequence-designer';
+
+const model = fromMermaid('graph TD; A-->B; B-->C');
+const model2 = fromJSON(jsonString);
+```
+
+Round-trip fidelity: `fromMermaid(diagram.toMermaid())` produces an equivalent model.
+
+Feed imported models directly into the Vue component:
+
+```vue
+<script setup>
+import { ref } from 'vue';
+import { FsdDiagram } from '@flowchart-sequence-designer/vue';
+import { fromMermaid } from 'flowchart-sequence-designer';
+
+const model = ref(fromMermaid('graph TD; A-->B; B-->C'));
+</script>
+
+<template>
+  <FsdDiagram v-model="model" />
+</template>
+```
+
+---
+
+### Exporter / importer round-trip rules
+
+The five export formats trade fidelity for portability:
+
+| Format | Round-trip | Preserved | Dropped or lossy |
+|---|---|---|---|
+| **JSON** | ✅ full | every field — `variant`, `metadata`, `waypoint`, x/y positions, edge arrowheads, message order | nothing |
+| **Mermaid (flowchart)** | partial | node shapes (`[]` `{}` `(())` `[/]`), labels, edge connectors (`-->`, `-.->`, `---`, `-.-`), edge labels, `subgraph` → `metadata.group` | positions, `waypoint`, `metadata.answers`, `variant`. Dotted edges collapse to dashed. |
+| **Mermaid (sequence)** | partial | actor order, message arrows (`->>`, `-->>`), labels | message metadata, styling overrides |
+| **PlantUML (flowchart)** | export-only | edge styles (`-->` / `-[dashed]->` / `-[dotted]->`), labels, node id | shape distinctions (PlantUML state-diagram syntax is coarser), positions, `metadata`, `variant` |
+| **PlantUML (sequence)** | export-only | actor order, message style (`->`, `-->`), labels | – |
+| **SVG** | export-only (rendered) | full visual parity with the canvas — same dot grid, same edge curves, same node styling | – |
+| **PNG** | export-only (rendered, **browser-only**) | same as SVG, rasterized at `devicePixelRatio` | – |
+
+If you need 100% round-trip fidelity, use JSON. If you need a format that
+GitHub renders inline in markdown, use Mermaid. If you need a polished
+image for documentation, use SVG or PNG.
+
+---
+
+### Presets & empty models
+
+```typescript
+import {
+  presetFlowchartModel,
+  presetSequenceModel,
+  emptyModel,
+} from 'flowchart-sequence-designer/ui';
+
+presetFlowchartModel('flowchart')  // 6-node order flow with one decision
+presetFlowchartModel('question')   // 1-question / 3-answer router
+presetFlowchartModel('journey')    // 5-step onboarding sequence
+presetSequenceModel()              // 3-actor login handshake
+
+emptyModel('flowchart')            // { type:'flowchart', variant:'flowchart', nodes:[], edges:[] }
+emptyModel('flowchart', 'journey') // same with variant: 'journey'
+emptyModel('sequence')             // { type:'sequence', nodes:[], edges:[], actors:[], messages:[] }
+```
+
+All presets return a deep clone — mutate the result freely.
+
+---
+
+### Working with the model directly
+
+```typescript
+import { Model } from 'flowchart-sequence-designer';
+
+const m = new Model('flowchart');
+m.addNode({ id: 'a', label: 'Step A', shape: 'rectangle' });
+m.addNode({ id: 'b', label: 'Step B', shape: 'rectangle' });
+m.addEdge({ id: 'e1', from: 'a', to: 'b', label: 'next' });
+
+console.log(m.toMermaid());
+```
+
+---
+
+## API Reference
+
+### `<FsdDiagram>`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `modelValue` | `DiagramModel` | preset | Pre-populate the editor (v-model) |
+| `height` | `string \| number` | `'500px'` | Container height (px, %, vh, calc()) |
+| `variant` | `'flowchart' \| 'question' \| 'journey'` | `'flowchart'` | Editor variant |
+| `theme` | `'light' \| 'dark' \| 'auto'` | `'auto'` | Color theme |
+| `themeOverrides` | `Partial<ThemeColors>` | — | Custom colors |
+| `allowedExports` | `ExportFormat[]` | all | Restrict export menu |
+| `allowImport` | `boolean` | `true` | Show import button |
+
+| Event | Payload | Description |
+|-------|---------|-------------|
+| `update:modelValue` | `DiagramModel` | Emitted on every edit (v-model) |
+| `export` | `{ format, content }` | Emitted when user exports |
+
+### `<FsdSequence>`
+
+Same as `<FsdDiagram>` except no `variant` prop. Accepts `Partial<SequenceThemeColors>` for `themeOverrides`.
+
+### `<FsdToolbar>`
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `allowedExports` | `ExportFormat[]` | Which formats to show |
+| `allowImport` | `boolean` | Show import button |
+
+| Event | Payload | Description |
+|-------|---------|-------------|
+| `exportRequest` | `ExportFormat` | Format the user chose |
+| `importRequest` | `string` | Raw text the user imported |
+
+### `<FsdStepEditor>`
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `nodeId` | `string` | ✓ | ID of the node to edit |
+| `model` | `DiagramModel` | ✓ | Current diagram model |
+| `variant` | `DiagramVariant` | | Editor variant |
+| `isDark` | `boolean` | | Dark mode flag |
+| `themeColors` | `ThemeColors` | | Theme color overrides |
+
+| Event | Payload | Description |
+|-------|---------|-------------|
+| `update:model` | `DiagramModel` | Updated model after edit |
+
+---
+
+### Diagram variants
+
+| Variant | Description |
+|---|---|
+| `flowchart` | General purpose — any shapes, freeform connections |
+| `question` | Each node is a question with lettered answer options (A, B, C…). Each answer has its own connection port. |
+| `journey` | Numbered milestone steps — user path or process walkthrough |
+
+---
+
+### Editor features
+
+**Canvas**
+- Drag nodes to reposition (snaps to 24px grid)
+- Scroll to zoom in/out (pinch to zoom on touch)
+- Drag the canvas background to pan (one-finger pan on touch)
+- Double-click a node to rename it inline
+- Dashed alignment guides appear when a dragged node lines up with a sibling's edge or center, and it snaps within 4 px
+- Bottom-right minimap — click or drag to pan the viewport
+- Accessibility: every node, port, and control is keyboard-reachable with a visible focus ring; selection / add / delete actions announce via an `aria-live` status region; the edge-flow animation honours `prefers-reduced-motion`
+
+**Connecting nodes**
+- Hover a node to reveal the bottom port dot, then drag it to another node
+- Question variant: each answer row has its own port dot — drag it to route that answer to a specific node
+
+**Node Navigator (left panel)**
+- Lists all nodes with shape badge, label, and connection counts
+- Search/filter by name
+- Click any row to jump to that node and center the canvas on it
+- Collapses to a slim icon strip
+
+**Step Editor (right panel)**
+- Appears when a node is selected
+- Edit the node name, change its shape
+- Manage branches / answer options (add, remove, reorder)
+- Question variant shows connection status per answer
+
+**Context menu** (right-click)
+- On canvas: Add node at cursor, Re-center, Undo, Redo
+- On node: Rename, Duplicate, Disconnect all edges, Delete
+- On edge: Style (solid/dashed/dotted), Arrowhead, Reset routing, Delete
+- On touch devices: long-press the canvas (~550ms) opens the canvas menu
+
+---
+
+### Keyboard shortcuts
+
+| Shortcut | Action |
+|---|---|
+| `Ctrl+Z` | Undo |
+| `Ctrl+Y` / `Ctrl+Shift+Z` | Redo |
+| `Ctrl+0` | Fit all nodes in view |
+| `Ctrl+C` / `Ctrl+V` | Copy and paste the current selection (internal edges preserved, +24 px offset on paste) |
+| `Ctrl+D` | Duplicate the current selection |
+| `Delete` / `Backspace` | Remove the current selection |
+| `Escape` | Deselect, cancel in-flight edge drag, close context menu |
+| `Arrow` keys | Nudge selection by 1 grid unit (Shift = 4 units) |
+| `Alt+Arrow` | Traverse to the nearest node in that direction from the current selection |
+| `Shift+click` | Toggle a node in/out of the current selection |
+| `Shift+drag` (empty canvas) | Box-select — add every intersected node to the selection |
+| Double-click edge label | Rename the edge label inline |
+| Drag edge midpoint | Route the edge through a waypoint (right-click → Reset routing to clear) |
+
+---
+
+### Theming
+
+```vue
+<!-- Force dark -->
+<FsdDiagram theme="dark" />
+
+<!-- Force light -->
+<FsdDiagram theme="light" />
+
+<!-- Follow system prefers-color-scheme (default) -->
+<FsdDiagram theme="auto" />
+```
+
+To match the editor to a host application's brand, pass `:theme-overrides` —
+a `Partial<ThemeColors>` that is shallow-merged on top of the resolved
+light/dark palette:
+
+```vue
+<script setup lang="ts">
+import { FsdDiagram } from '@flowchart-sequence-designer/vue';
+import type { ThemeColors } from 'flowchart-sequence-designer/ui';
+
+const brand: Partial<ThemeColors> = {
+  canvas: '#0b1020',
+  nodeFill: '#111a2e',
+  nodeStroke: '#2b3a5a',
+  nodeSelectedFill: '#1a2447',
+  edgeColor: '#7b8aa6',
+  textPrimary: '#e6edf7',
+};
+</script>
+
+<template>
+  <FsdDiagram theme="dark" :theme-overrides="brand" />
+</template>
+```
+
+#### ThemeColors token groups (flowchart)
+
+| Token group | Members | Where it shows up |
+|---|---|---|
+| Canvas | `canvas`, `dot` | Background + dot grid |
+| Nodes | `nodeFill`, `nodeStroke`, `nodeSelectedFill` | Node body, border, selection tint |
+| Edges | `edgeColor` | Edge stroke + arrowhead |
+| Type ramp | `textPrimary`, `textSecondary`, `textMuted` | Labels, hints, secondary text |
+| Chrome — panel | `panelBg`, `panelBorder` | Side panel surface |
+| Chrome — controls | `ctrlsBg`, `ctrlsBorder` | Toolbar, zoom controls |
+| Chrome — input | `inputBg`, `inputBorder`, `inputText` | Form fields in the side panel |
+| Chrome — card | `cardBg`, `cardBorder` | Answer rows, branch rows |
+| Chrome — section | `sectionBorder` | Divider between panel sections |
+| Buttons | `btnSecBg`, `btnSecText`, `shapeBtnBg`, `shapeBtnBorder` | Secondary buttons, shape picker |
+| Accents | `addFormBg`, `bannerBg`, `labelText`, `hintText`, `statusBg` | Add-form backdrop, validation banner |
+
+#### SequenceThemeColors (sequence)
+
+The sequence editor accepts the same `:theme-overrides` prop with a
+slightly different shape — `Partial<SequenceThemeColors>`. It drops
+node-specific tokens and adds `lifeline`, `arrow`, and `actorFill` /
+`actorStroke` / `actorText` for the swim-lane elements.
+
+---
+
+### Restricting exports and import
+
+```vue
+<!-- Only allow JSON and SVG download -->
+<FsdDiagram :allowed-exports="['json', 'svg']" />
+
+<!-- Hide the import button entirely -->
+<FsdDiagram :allow-import="false" />
+
+<!-- Handle exports yourself (e.g. send to an API) -->
+<FsdDiagram @export="handleExport" />
+```
+
+```typescript
+function handleExport(e: { format: string; content: string | Blob }) {
+  if (e.format === 'png') {
+    const url = URL.createObjectURL(e.content as Blob);
+    // download or upload...
+  }
+}
+```
+
+---
+
 ## Height Handling
 
 The `height` prop accepts multiple formats:
 
 ```vue
-<!-- Number (pixels) -->
-<FsdDiagram :height="600" />
-
-<!-- String pixels -->
-<FsdDiagram height="600" />
-
-<!-- Percentage -->
-<FsdDiagram height="100%" />
-
-<!-- Viewport units -->
-<FsdDiagram height="80vh" />
-
-<!-- calc() expressions -->
-<FsdDiagram height="calc(100vh - 64px)" />
+<FsdDiagram :height="600" />           <!-- Number (pixels) -->
+<FsdDiagram height="600" />            <!-- String pixels -->
+<FsdDiagram height="100%" />           <!-- Percentage -->
+<FsdDiagram height="80vh" />           <!-- Viewport units -->
+<FsdDiagram height="calc(100vh - 64px)" /> <!-- calc() -->
 ```
 
 ---
 
-## Theming
+## Accessibility & touch
 
-### Theme Modes
+The editor is keyboard-first and screen-reader-aware. Every interaction
+reachable by mouse has a keyboard equivalent; every state change announces
+via a polite `aria-live` region.
 
-```vue
-<FsdDiagram theme="light" />   <!-- Always light -->
-<FsdDiagram theme="dark" />    <!-- Always dark -->
-<FsdDiagram theme="auto" />    <!-- Follows prefers-color-scheme -->
-```
+**Keyboard navigation** — Every node, port, and toolbar control is reachable
+with Tab; selection moves with Arrow keys (1 grid unit, or 4 with Shift);
+Alt+Arrow traverses the graph to the nearest connected neighbor in that
+direction. The focus ring is visible at all times.
 
-### Custom Colors
+**ARIA roles** — The canvas is an `application` region with an `aria-label`;
+selection, add, and delete actions update an `aria-live="polite"` status
+region announced as "Selected {label}", "Added node {label}", etc. The
+toolbar uses native `<button>` elements with explicit labels.
 
-```vue
-<FsdDiagram
-  theme="dark"
-  :theme-overrides="{
-    canvasBg: '#1a1a2e',
-    nodeBg: '#16213e',
-    nodeBorder: '#42b883',
-    accent: '#42b883',
-    text: '#e0e0e0',
-  }"
-/>
-```
+**Reduced motion** — The animated edge-flow dash honours
+`prefers-reduced-motion` — when set, the dash freezes and the canvas renders
+with no animation.
 
-### ThemeColors Tokens
-
-| Token | Description |
-|-------|-------------|
-| `canvasBg` | Canvas background color |
-| `nodeBg` | Node fill color |
-| `nodeBorder` | Node border/stroke |
-| `accent` | Accent (selections, handles, active states) |
-| `text` | Primary text color |
-| `edgeLine` | Edge/connection line color |
-| `gridLine` | Grid line color |
-| `selectionBg` | Selection rectangle fill |
+**Touch interactions:**
+| Action | Gesture |
+|---|---|
+| Pan | One-finger drag on the canvas background |
+| Zoom | Two-finger pinch |
+| Context menu | Long-press (~550 ms) on the canvas or on a node |
+| Larger hit targets | Port circles auto-enlarge on coarse-pointer devices (24 px vs. 14 px on mouse) |
+| Drag node | Press and drag the node body. The 8 px drag threshold lets you tap to select without nudging. |
 
 ---
 
-## Export & Import
+## Security
 
-### Export Formats
+This package uses the same core editor as the React version, which takes
+security seriously:
 
-| Format | Content Type | Description |
-|--------|-------------|-------------|
-| `json` | `string` | Full model as JSON (round-trip safe) |
-| `mermaid` | `string` | Mermaid diagram syntax |
-| `svg` | `string` | SVG vector markup |
-| `png` | `Blob` | PNG raster image |
+- **Input sanitization** — All user-provided text is sanitized before rendering
+  (HTML tags, `javascript:`/`data:`/`vbscript:` URIs, `on*` event handlers, and
+  control characters are stripped).
+- **Resource limits** — Importers enforce hard caps (500 nodes, 2000 edges, 100
+  actors, 2000 messages, 2MB input) to prevent resource exhaustion.
+- **Prototype pollution defense** — JSON importer strips `__proto__`,
+  `constructor`, and `prototype` keys recursively.
+- **SVG export** — Defence-in-depth: sanitize first, then XML-escape. Safe even
+  if consumed by less-strict parsers.
+- **No `eval` / `innerHTML`** — The codebase never uses dynamic code execution
+  or raw HTML injection.
+- **CodeQL** — Automated security scanning runs weekly and on every PR.
+- **Dependabot** — Dependency updates monitored weekly.
 
-### Handling Exports
+---
 
-```vue
-<script setup>
-import { FsdDiagram } from "@flowchart-sequence-designer/vue";
+## Framework Wrappers
 
-function handleExport({ format, content }) {
-  if (format === "png") {
-    const url = URL.createObjectURL(content);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "diagram.png";
-    a.click();
-    URL.revokeObjectURL(url);
-  } else if (format === "json") {
-    localStorage.setItem("savedDiagram", content);
-  } else {
-    console.log(format, content);
-  }
+| Framework | Package | Docs |
+|-----------|---------|------|
+| React | [`flowchart-sequence-designer`](https://www.npmjs.com/package/flowchart-sequence-designer) | [Docs & Demo](https://ag-gr-hub.github.io/flowchart-sequence-designer/) |
+| Angular | [`@flowchart-sequence-designer/angular`](https://www.npmjs.com/package/@flowchart-sequence-designer/angular) | [Docs & Demo](https://ag-gr-hub.github.io/flowchart-sequence-designer-angular/) |
+| Vue | [`@flowchart-sequence-designer/vue`](https://www.npmjs.com/package/@flowchart-sequence-designer/vue) | [Docs & Demo](https://ag-gr-hub.github.io/flowchart-sequence-designer-vue/) |
+
+---
+
+## TypeScript Types
+
+For convenience, common types can be imported directly:
+
+```typescript
+import type {
+  DiagramModel,
+  DiagramNode,
+  DiagramEdge,
+  DiagramType,
+  DiagramVariant,
+  ExportFormat,
+  NodeShape,
+  SequenceMessage,
+} from 'flowchart-sequence-designer';
+
+import type {
+  ThemeColors,
+  SequenceThemeColors,
+} from 'flowchart-sequence-designer/ui';
+```
+
+### `DiagramModel`
+
+```typescript
+interface DiagramModel {
+  type: 'flowchart' | 'sequence';
+  variant?: DiagramVariant;    // 'flowchart' | 'question' | 'journey' (flowchart-type only)
+  title?: string;
+  nodes: DiagramNode[];        // always present (empty array for sequence models)
+  edges: DiagramEdge[];        // always present (empty array for sequence models)
+  actors?: string[];           // sequence models only — ordered actor names
+  messages?: SequenceMessage[]; // sequence models only — ordered messages
 }
-</script>
-
-<template>
-  <FsdDiagram
-    :allowed-exports="['json', 'svg', 'png']"
-    @export="handleExport"
-  />
-</template>
 ```
 
-### Programmatic Import
+### `DiagramNode`
 
 ```typescript
-import { fromMermaid, fromJSON } from "flowchart-sequence-designer";
-
-// From Mermaid syntax
-const model = fromMermaid(`graph TD
-  A[Start] --> B[Process]
-  B --> C[End]`);
-
-// From previously saved JSON
-const model = fromJSON(localStorage.getItem("savedDiagram"));
+interface DiagramNode {
+  id: string;
+  label: string;
+  shape?: 'rectangle' | 'diamond' | 'circle' | 'parallelogram';
+  x?: number;
+  y?: number;
+  metadata?: Record<string, unknown>;
+  // question variant: metadata.answers = string[]
+}
 ```
 
----
-
-## Programmatic API
-
-### Flowchart Builder
+### `DiagramEdge`
 
 ```typescript
-import { flowchart } from "flowchart-sequence-designer";
-
-const model = flowchart()
-  .start("Begin")
-  .step("Process Data")
-  .decision("Valid?")
-    .yes().step("Save").end("Done")
-    .no().step("Retry").end("Failed")
-  .build();
+interface DiagramEdge {
+  id: string;
+  from: string;
+  to: string;
+  label?: string;
+  style?: 'solid' | 'dashed' | 'dotted';
+  arrowhead?: 'arrow' | 'none' | 'open';
+  waypoint?: { x: number; y: number }; // manual routing point (JSON only)
+}
 ```
 
-### Sequence Builder
+### `SequenceMessage`
 
 ```typescript
-import { sequence } from "flowchart-sequence-designer";
-
-const model = sequence()
-  .participant("Client")
-  .participant("Server")
-  .participant("DB")
-  .message("Client", "Server", "POST /api/data")
-  .message("Server", "DB", "INSERT INTO...")
-  .message("DB", "Server", "OK")
-  .message("Server", "Client", "201 Created")
-  .build();
-```
-
-### Model API
-
-```typescript
-import { Model } from "flowchart-sequence-designer";
-
-const m = Model.from(diagramModel);
-m.addNode({ id: "n1", label: "New Step", x: 100, y: 200 });
-m.addEdge({ source: "start", target: "n1" });
-m.removeNode("old-node");
-
-const updated = m.toModel();
-```
-
----
-
-## Presets & Empty Models
-
-```typescript
-import { presetFlowchartModel, presetSequenceModel, emptyModel } from "flowchart-sequence-designer/ui";
-
-// Rich preset with sample content
-const preset = presetFlowchartModel();
-
-// Empty canvas
-const blank = emptyModel("flowchart");
-```
-
----
-
-## useReactBridge Composable
-
-For advanced use cases, you can use the internal composable directly:
-
-```typescript
-import { ref } from "vue";
-import { useReactBridge } from "@flowchart-sequence-designer/vue";
-
-const container = ref<HTMLElement | null>(null);
-
-const { loading, error } = useReactBridge(
-  container,
-  () => ({ height: "100%", theme: "dark" as const }),
-  () => import("flowchart-sequence-designer/ui").then((m) => m.DiagramEditor),
-);
-```
-
-### Parameters
-
-| Param | Type | Description |
-|-------|------|-------------|
-| `containerRef` | `Ref<HTMLElement \| null>` | Template ref for mount target |
-| `getProps` | `() => P` | Function returning React props (deeply watched) |
-| `componentImport` | `() => Promise<ComponentType>` | Dynamic import for the React component |
-
-### Returns
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `loading` | `Ref<boolean>` | True while editor is loading |
-| `error` | `Ref<string \| null>` | Error message if load failed |
-| `getBridge` | `() => ReactBridge \| null` | Access the underlying bridge instance |
-
----
-
-## TypeScript
-
-All components ship with full type definitions:
-
-```typescript
-import type { DiagramModel, ExportFormat } from "flowchart-sequence-designer";
-import type { DiagramEditorProps, SequenceEditorProps, ThemeColors } from "flowchart-sequence-designer/ui";
-```
-
-### tsconfig Requirements
-
-```json
-{
-  "compilerOptions": {
-    "moduleResolution": "bundler"
-  }
+interface SequenceMessage {
+  id: string;
+  from: string;            // actor name
+  to: string;              // actor name
+  label: string;
+  style?: 'solid' | 'dashed';
 }
 ```
 
@@ -482,7 +631,13 @@ import type { DiagramEditorProps, SequenceEditorProps, ThemeColors } from "flowc
 
 ## Architecture
 
-This package uses a **React Bridge** pattern to embed the React-based editor inside Vue:
+This wrapper uses a lightweight **React Bridge** pattern:
+
+1. Each Vue component creates a React root inside its template `<div ref>`
+2. Vue props are mapped to React props via the bridge
+3. React `onChange`/`onExport` callbacks call Vue `emit()` directly (no zones needed)
+4. React internal renders run outside Vue's reactivity (no unnecessary re-renders)
+5. On `onUnmounted`, the React root is cleanly unmounted
 
 ```
 Vue Component (SFC)
@@ -493,95 +648,50 @@ Vue Component (SFC)
        └─ onUnmounted → bridge.unmount()
 ```
 
-Key characteristics:
+### Performance Characteristics
 
-- ✅ **No interop library** — Direct React root mounting, no vue-react bridge needed
-- ✅ **Isolated rendering** — React re-renders don't trigger Vue reactivity
-- ✅ **Lazy loading** — Editor loaded only when component mounts (code-split)
-- ✅ **Clean lifecycle** — Proper unmount prevents memory leaks
-- ✅ **No zones** — Simpler than Angular (no NgZone management needed)
-
----
-
-## Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+Z` / `⌘Z` | Undo |
-| `Ctrl+Y` / `⌘⇧Z` | Redo |
-| `Ctrl+A` / `⌘A` | Select all |
-| `Delete` / `Backspace` | Delete selected |
-| `Ctrl+C` / `⌘C` | Copy |
-| `Ctrl+V` / `⌘V` | Paste |
-| `Ctrl+D` / `⌘D` | Duplicate |
-| `Escape` | Deselect / Cancel |
-| `+` / `-` | Zoom in/out |
-| `Ctrl+0` / `⌘0` | Reset zoom |
-| `Space + Drag` | Pan canvas |
+- **No interop library** — Direct React root mounting, no vue-react bridge needed
+- **Isolated rendering** — React re-renders don't trigger Vue reactivity
+- **Lazy-loaded** — the React editor is loaded via dynamic `import()` (code-split friendly)
+- **Clean lifecycle** — Proper unmount prevents memory leaks
+- **Minimal overhead** — the bridge is ~1KB; React+ReactDOM peer deps add ~45KB gzipped
 
 ---
 
-## Accessibility & Touch
+## Package structure
 
-- Full keyboard navigation (Tab through nodes, Enter to select)
-- ARIA labels on all interactive elements
-- Touch gestures: pinch-to-zoom, two-finger pan
-- Compatible with high contrast mode
-- Screen reader announcements for state changes
-
----
-
-## Editor Features
-
-- **Drag-and-drop** node creation from palette
-- **Smart connectors** with auto-routing
-- **Multi-select** with Shift+Click or rubber-band selection
-- **Copy/paste** across browser tabs (clipboard API)
-- **Undo/redo** with configurable history depth
-- **Grid snapping** with configurable grid size
-- **Auto-layout** algorithms (dagre-based)
-- **Mini-map** for large diagrams
-- **Zoom controls** (mouse wheel, trackpad, buttons)
-- **Label editing** with inline text editor
+```
+@flowchart-sequence-designer/vue/
+├── dist/
+│   ├── index.js / index.cjs      ← ESM + CJS builds
+│   └── index.d.ts                ← Type definitions
+└── src/
+    ├── react-bridge.ts            # ReactBridge class (createRoot/render/unmount)
+    ├── useReactBridge.ts          # Composable: mount/watch/unmount lifecycle
+    ├── FsdDiagram.vue             # <FsdDiagram> (flowchart/question/journey)
+    ├── FsdSequence.vue            # <FsdSequence>
+    ├── FsdToolbar.vue             # <FsdToolbar>
+    ├── FsdStepEditor.vue          # <FsdStepEditor>
+    └── index.ts                   # Public exports
+```
 
 ---
 
-## Security
-
-- No external network calls from the editor
-- All rendering is client-side (SVG + Canvas)
-- No eval() or dynamic code execution
-- Content Security Policy compatible
-- User input is sanitized (XSS-safe label rendering)
-
----
-
-## Requirements
-
-| Requirement | Version |
-|-------------|---------|
-| Vue | ≥3.3.0 |
-| Node.js (build) | ≥18 |
-| TypeScript (optional) | ≥5.0 |
-| Browsers | Chrome 90+, Firefox 90+, Safari 15+, Edge 90+ |
-
----
-
-## Building from Source
+## Building from source
 
 ```bash
 git clone https://github.com/ag-gr-hub/flowchart-sequence-designer-vue.git
 cd flowchart-sequence-designer-vue
 npm install
-npm run build        # Build library
-npm test             # Run tests
-npm run typecheck    # Type check
+npm run build        # library → dist/
+npm test             # unit tests
+npm run typecheck    # type check
 
 # Demo app
 cd demo
 npm install
-npm run dev          # Start dev server
-npm run build        # Production build
+npm run dev          # dev server
+npm run build        # production build
 ```
 
 ---
@@ -596,7 +706,7 @@ Multiple React instances loaded. Add `resolve.dedupe` to your Vite config:
 // vite.config.ts
 export default defineConfig({
   resolve: {
-    dedupe: ["react", "react-dom"],
+    dedupe: ['react', 'react-dom'],
   },
 });
 ```
@@ -608,21 +718,9 @@ export default defineConfig({
 3. Check browser console for dynamic import errors
 4. Verify `moduleResolution` is `"bundler"` in tsconfig
 
-### "Cannot find module" TypeScript Error
-
-Ensure your tsconfig uses bundler resolution:
-
-```json
-{
-  "compilerOptions": {
-    "moduleResolution": "bundler"
-  }
-}
-```
-
 ### Webpack Users
 
-If using Webpack instead of Vite, ensure `.vue` files are handled by `vue-loader` and add an alias for React deduplication:
+If using Webpack instead of Vite, add an alias for React deduplication:
 
 ```javascript
 // webpack.config.js
@@ -636,10 +734,17 @@ resolve: {
 
 ---
 
+## Requirements
+
+- Vue 3.3+
+- `flowchart-sequence-designer` ≥ 1.2.0
+- `react` & `react-dom` ≥ 18
+- Node.js ≥ 20 (build only)
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
 
 ## License
 
-[MIT](LICENSE) © ag-gr-hub
+MIT

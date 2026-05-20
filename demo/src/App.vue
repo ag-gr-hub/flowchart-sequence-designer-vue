@@ -3,160 +3,177 @@ import { ref, computed } from "vue";
 import { FsdDiagram, FsdSequence } from "@flowchart-sequence-designer/vue";
 import DocsTab from "./DocsTab.vue";
 
-type Tab = "flowchart" | "question-flow" | "journey-map" | "sequence" | "docs";
+type Tab = "flowchart" | "question" | "journey" | "sequence" | "docs";
+type Theme = "light" | "dark" | "auto";
 
-const activeTab = ref<Tab>("flowchart");
-const theme = ref<"light" | "dark" | "auto">("auto");
+const tab = ref<Tab>("flowchart");
+const theme = ref<Theme>("auto");
+const themes: Theme[] = ["light", "auto", "dark"];
 
 const editorHeight = computed(() => "calc(100vh - 52px)");
 
-const tabs: { id: Tab; label: string }[] = [
-  { id: "flowchart", label: "Flowchart" },
-  { id: "question-flow", label: "Question Flow" },
-  { id: "journey-map", label: "Journey Map" },
-  { id: "sequence", label: "Sequence" },
-  { id: "docs", label: "For Developers" },
-];
-
-function cycleTheme() {
-  const order: ("light" | "dark" | "auto")[] = ["light", "dark", "auto"];
-  const idx = order.indexOf(theme.value);
-  theme.value = order[(idx + 1) % 3];
-}
-
-const themeIcon = computed(() => {
-  if (theme.value === "light") return "☀️";
-  if (theme.value === "dark") return "🌙";
-  return "🖥️";
+const variant = computed(() => {
+  if (tab.value === "flowchart") return "flowchart" as const;
+  if (tab.value === "question") return "question" as const;
+  if (tab.value === "journey") return "journey" as const;
+  return "flowchart" as const;
 });
+
+function switchTab(t: Tab) {
+  tab.value = t;
+}
 </script>
 
 <template>
-  <div class="app">
-    <nav class="navbar">
-      <div class="brand">
-        <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
-          <rect x="2" y="2" width="28" height="28" rx="6" fill="#42b883" />
-          <path d="M16 6L26 26H6L16 6Z" fill="white" opacity="0.9" />
-          <path d="M16 12L22 24H10L16 12Z" fill="#42b883" />
+  <div class="app-root">
+    <!-- Single top nav (mirrors React/Angular layout) -->
+    <nav class="topnav">
+      <a class="brand" href="https://github.com/ag-gr-hub/flowchart-sequence-designer-vue" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+          <path d="M2 4l14 24L30 4h-5.5L16 18.5 7.5 4H2z" fill="#42b883"/>
+          <path d="M7.5 4L16 18.5 24.5 4h-5L16 11 12.5 4h-5z" fill="#35495e"/>
         </svg>
-        <span class="brand-text">FSD Vue</span>
-      </div>
-      <div class="tabs">
+        @flowchart-sequence-designer/vue
+      </a>
+
+      <button :class="{ active: tab === 'flowchart' }" @click="switchTab('flowchart')">
+        <span class="tab-label">Flowchart</span>
+        <span class="tab-desc">General purpose — any shapes, any flow</span>
+      </button>
+      <button :class="{ active: tab === 'question' }" @click="switchTab('question')">
+        <span class="tab-label">Question Flow</span>
+        <span class="tab-desc">Each node is a question; answers are side-by-side</span>
+      </button>
+      <button :class="{ active: tab === 'journey' }" @click="switchTab('journey')">
+        <span class="tab-label">Journey Map</span>
+        <span class="tab-desc">Numbered milestone steps</span>
+      </button>
+      <button :class="{ active: tab === 'sequence' }" @click="switchTab('sequence')">
+        <span class="tab-label">Sequence</span>
+        <span class="tab-desc">Actor lifelines + ordered messages</span>
+      </button>
+      <button class="docs-tab" :class="{ active: tab === 'docs' }" @click="switchTab('docs')">
+        <span class="tab-label">For Developers</span>
+        <span class="tab-desc">API &amp; programmatic usage</span>
+      </button>
+
+      <div class="nav-spacer"></div>
+      <div class="theme-toggle">
         <button
-          v-for="tab in tabs"
-          :key="tab.id"
-          :class="['tab-btn', { active: activeTab === tab.id }]"
-          @click="activeTab = tab.id"
+          v-for="t in themes"
+          :key="t"
+          :class="{ active: theme === t }"
+          @click="theme = t"
         >
-          {{ tab.label }}
+          {{ t === 'light' ? '☀ Light' : t === 'dark' ? '☾ Dark' : '⊙ Auto' }}
         </button>
       </div>
-      <button class="theme-toggle" @click="cycleTheme" :title="`Theme: ${theme}`">
-        {{ themeIcon }}
-      </button>
     </nav>
 
-    <main class="content">
-      <FsdDiagram
-        v-if="activeTab === 'flowchart'"
-        :height="editorHeight"
-        variant="flowchart"
-        :theme="theme"
-      />
-      <FsdDiagram
-        v-if="activeTab === 'question-flow'"
-        :height="editorHeight"
-        variant="question"
-        :theme="theme"
-      />
-      <FsdDiagram
-        v-if="activeTab === 'journey-map'"
-        :height="editorHeight"
-        variant="journey"
-        :theme="theme"
-      />
-      <FsdSequence
-        v-if="activeTab === 'sequence'"
-        :height="editorHeight"
-        :theme="theme"
-      />
-      <DocsTab v-if="activeTab === 'docs'" />
-    </main>
+    <!-- Content -->
+    <DocsTab v-if="tab === 'docs'" />
+    <FsdSequence
+      v-else-if="tab === 'sequence'"
+      :height="editorHeight"
+      :theme="theme"
+      :allow-import="true"
+    />
+    <FsdDiagram
+      v-else
+      :height="editorHeight"
+      :variant="variant"
+      :theme="theme"
+      :allow-import="true"
+    />
   </div>
 </template>
 
-<style scoped>
-.app {
-  height: 100vh;
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.app-root {
   display: flex;
   flex-direction: column;
-  background: #1a1a2e;
-  color: #e0e0e0;
+  height: 100vh;
+  overflow: hidden;
+  background: #0a0f1a;
+  color: #e2e8f0;
+  font-family: ui-sans-serif, system-ui, sans-serif;
 }
 
-.navbar {
+/* ─── Single top nav bar (matches React/Angular) ─── */
+.topnav {
   display: flex;
-  align-items: center;
-  height: 52px;
+  gap: 0;
+  background: #0f172a;
   padding: 0 16px;
-  background: #16213e;
-  border-bottom: 1px solid #0f3460;
-  gap: 16px;
+  align-items: stretch;
   flex-shrink: 0;
+  border-bottom: 1px solid #1e293b;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
-
 .brand {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.brand-text {
-  font-weight: 700;
-  font-size: 16px;
-  color: #42b883;
-}
-
-.tabs {
-  display: flex;
-  gap: 4px;
-  flex: 1;
-}
-
-.tab-btn {
-  background: transparent;
-  border: none;
-  color: #aaa;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
+  padding-right: 20px;
+  color: #f1f5f9;
   font-size: 13px;
-  font-weight: 500;
-  transition: all 0.15s;
+  font-weight: 700;
+  border-right: 1px solid #1e293b;
+  text-decoration: none;
+  margin-right: 8px;
+  white-space: nowrap;
 }
-
-.tab-btn:hover {
-  color: #fff;
-  background: rgba(66, 184, 131, 0.1);
-}
-
-.tab-btn.active {
-  color: #fff;
-  background: #42b883;
-}
-
-.theme-toggle {
-  background: transparent;
-  border: 1px solid #333;
-  border-radius: 6px;
-  padding: 6px 10px;
+.topnav > button {
+  padding: 10px 18px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
   cursor: pointer;
-  font-size: 16px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 400;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
 }
-
-.content {
-  flex: 1;
-  overflow: hidden;
+.topnav > button.active {
+  border-bottom-color: #42b883;
+  color: #f1f5f9;
+  font-weight: 700;
+}
+.topnav > button:hover { color: #cbd5e1; }
+.topnav > button.docs-tab.active {
+  border-bottom-color: #10b981;
+  color: #6ee7b7;
+}
+.tab-label { font-size: 12px; }
+.tab-desc { font-size: 10px; opacity: 0.6; white-space: nowrap; }
+.nav-spacer { flex: 1; }
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.theme-toggle button {
+  padding: 4px 10px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 400;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.theme-toggle button.active {
+  background: rgba(66, 184, 131, 0.25);
+  border-color: #42b883;
+  color: #6ee7b7;
+  font-weight: 600;
 }
 </style>
