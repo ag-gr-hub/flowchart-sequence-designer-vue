@@ -1,6 +1,6 @@
 {
   "name": "@flowchart-sequence-designer/vue",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Vue 3 wrapper components for flowchart-sequence-designer",
   "type": "module",
   "main": "./dist/index.cjs",
