@@ -67,13 +67,13 @@ const themeIcon = computed(() => {
       <FsdDiagram
         v-if="activeTab === 'question-flow'"
         :height="editorHeight"
-        variant="question-flow"
+        variant="question"
         :theme="theme"
       />
       <FsdDiagram
         v-if="activeTab === 'journey-map'"
         :height="editorHeight"
-        variant="journey-map"
+        variant="journey"
         :theme="theme"
       />
       <FsdSequence
