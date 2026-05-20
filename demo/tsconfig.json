@@ -11,12 +11,10 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "verbatimModuleSyntax": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "paths": {
       "@flowchart-sequence-designer/vue": ["../src/index.ts"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.vue"],
-  "references": [{ "path": "../tsconfig.json" }]
+  "include": ["src/**/*.ts", "src/**/*.vue"]
 }
