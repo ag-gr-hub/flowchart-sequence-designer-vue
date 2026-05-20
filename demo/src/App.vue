@@ -27,8 +27,8 @@ function switchTab(t: Tab) {
 <template>
   <div class="app-root">
     <!-- Single top nav (mirrors React/Angular layout) -->
-    <nav class="topnav">
-      <a class="brand" href="https://github.com/ag-gr-hub/flowchart-sequence-designer-vue" target="_blank">
+    <nav class="topnav" role="tablist" aria-label="Editor variants">
+      <a class="brand" href="https://github.com/ag-gr-hub/flowchart-sequence-designer-vue" target="_blank" rel="noopener noreferrer">
         <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
           <path d="M2 4l14 24L30 4h-5.5L16 18.5 7.5 4H2z" fill="#42b883"/>
           <path d="M7.5 4L16 18.5 24.5 4h-5L16 11 12.5 4h-5z" fill="#35495e"/>
@@ -36,23 +36,23 @@ function switchTab(t: Tab) {
         @flowchart-sequence-designer/vue
       </a>
 
-      <button :class="{ active: tab === 'flowchart' }" @click="switchTab('flowchart')">
+      <button type="button" role="tab" :aria-selected="tab === 'flowchart'" :class="{ active: tab === 'flowchart' }" @click="switchTab('flowchart')">
         <span class="tab-label">Flowchart</span>
         <span class="tab-desc">General purpose — any shapes, any flow</span>
       </button>
-      <button :class="{ active: tab === 'question' }" @click="switchTab('question')">
+      <button type="button" role="tab" :aria-selected="tab === 'question'" :class="{ active: tab === 'question' }" @click="switchTab('question')">
         <span class="tab-label">Question Flow</span>
         <span class="tab-desc">Each node is a question; answers are side-by-side</span>
       </button>
-      <button :class="{ active: tab === 'journey' }" @click="switchTab('journey')">
+      <button type="button" role="tab" :aria-selected="tab === 'journey'" :class="{ active: tab === 'journey' }" @click="switchTab('journey')">
         <span class="tab-label">Journey Map</span>
         <span class="tab-desc">Numbered milestone steps</span>
       </button>
-      <button :class="{ active: tab === 'sequence' }" @click="switchTab('sequence')">
+      <button type="button" role="tab" :aria-selected="tab === 'sequence'" :class="{ active: tab === 'sequence' }" @click="switchTab('sequence')">
         <span class="tab-label">Sequence</span>
         <span class="tab-desc">Actor lifelines + ordered messages</span>
       </button>
-      <button class="docs-tab" :class="{ active: tab === 'docs' }" @click="switchTab('docs')">
+      <button type="button" role="tab" :aria-selected="tab === 'docs'" class="docs-tab" :class="{ active: tab === 'docs' }" @click="switchTab('docs')">
         <span class="tab-label">For Developers</span>
         <span class="tab-desc">API &amp; programmatic usage</span>
       </button>
@@ -62,7 +62,9 @@ function switchTab(t: Tab) {
         <button
           v-for="t in themes"
           :key="t"
+          type="button"
           :class="{ active: theme === t }"
+          :aria-pressed="theme === t"
           @click="theme = t"
         >
           {{ t === 'light' ? '☀ Light' : t === 'dark' ? '☾ Dark' : '⊙ Auto' }}
@@ -175,5 +177,42 @@ function switchTab(t: Tab) {
   border-color: #42b883;
   color: #6ee7b7;
   font-weight: 600;
+}
+
+/* Focus styles */
+button:focus-visible, a:focus-visible {
+  outline: 2px solid #42b883;
+  outline-offset: 2px;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .topnav {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    overflow-y: visible;
+  }
+  .brand {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #1e293b;
+    padding: 8px 16px;
+    margin-right: 0;
+  }
+  .tab-desc {
+    display: none;
+  }
+  .docs-sidebar {
+    display: none;
+  }
+  .docs-content {
+    padding: 20px 16px 60px !important;
+  }
+}
+@media (max-width: 480px) {
+  .topnav > button {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
 }
 </style>

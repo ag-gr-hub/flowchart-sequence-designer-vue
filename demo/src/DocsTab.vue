@@ -3,7 +3,7 @@
 
 <template>
   <main class="docs-page">
-    <div class="docs-sidebar">
+    <nav class="docs-sidebar" aria-label="Documentation">
       <div class="sidebar-heading">Documentation</div>
       <a href="#install">Install</a>
       <a href="#quick-start">Quick Start</a>
@@ -28,11 +28,11 @@
       <a href="#inputs">Component props</a>
       <a href="#types">TypeScript Types</a>
       <div class="sidebar-divider"></div>
-      <a href="https://ag-gr-hub.github.io/flowchart-sequence-designer/" target="_blank">↗ React Version</a>
-      <a href="https://ag-gr-hub.github.io/flowchart-sequence-designer-angular/" target="_blank">↗ Angular Version</a>
-      <a href="https://github.com/ag-gr-hub/flowchart-sequence-designer-vue" target="_blank">↗ GitHub</a>
-      <a href="https://www.npmjs.com/package/@flowchart-sequence-designer/vue" target="_blank">↗ npm</a>
-    </div>
+      <a href="https://ag-gr-hub.github.io/flowchart-sequence-designer/" target="_blank" rel="noopener noreferrer">↗ React Version</a>
+      <a href="https://ag-gr-hub.github.io/flowchart-sequence-designer-angular/" target="_blank" rel="noopener noreferrer">↗ Angular Version</a>
+      <a href="https://github.com/ag-gr-hub/flowchart-sequence-designer-vue" target="_blank" rel="noopener noreferrer">↗ GitHub</a>
+      <a href="https://www.npmjs.com/package/@flowchart-sequence-designer/vue" target="_blank" rel="noopener noreferrer">↗ npm</a>
+    </nav>
     <div class="docs-content">
       <!-- Supported Frameworks -->
       <div class="frameworks-box">
@@ -636,5 +636,27 @@ emptyModel(<span class="str">'sequence'</span>)             <span class="kw">// 
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 12px;
+}
+
+/* ─── Responsive (docs) ─── */
+@media (max-width: 768px) {
+  .docs-page {
+    flex-direction: column;
+  }
+  .docs-sidebar {
+    display: none;
+  }
+  .docs-content {
+    padding: 20px 16px 60px;
+  }
+  .props-table {
+    font-size: 12px;
+  }
+  .props-table th, .props-table td {
+    padding: 6px 8px;
+  }
+  .code-block {
+    padding: 12px 14px;
+  }
 }
 </style>
