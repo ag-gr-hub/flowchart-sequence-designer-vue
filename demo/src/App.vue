@@ -10,7 +10,7 @@ const tab = ref<Tab>("flowchart");
 const theme = ref<Theme>("auto");
 const themes: Theme[] = ["light", "auto", "dark"];
 
-const editorHeight = computed(() => "calc(100vh - 52px)");
+const editorHeight = computed(() => "100%");
 
 const variant = computed(() => {
   if (tab.value === "flowchart") return "flowchart" as const;
@@ -97,10 +97,15 @@ function switchTab(t: Tab) {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   background: #0a0f1a;
   color: #e2e8f0;
   font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.app-root > :last-child {
+  flex: 1;
+  min-height: 0;
 }
 
 /* ─── Single top nav bar (matches React/Angular) ─── */
