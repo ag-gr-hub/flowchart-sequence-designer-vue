@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 import { FsdDiagram, FsdSequence } from "@flowchart-sequence-designer/vue";
 import { presetFlowchartModel, presetSequenceModel } from "flowchart-sequence-designer/ui";
-import type { DiagramModel } from "flowchart-sequence-designer/ui";
+import type { DiagramModel } from "flowchart-sequence-designer";
 import DocsTab from "./DocsTab.vue";
 
 type Tab = "flowchart" | "question" | "journey" | "sequence" | "docs";
