@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.6 (2026-08-09)
+
+### Security
+
+- Patched 3 high-severity advisories across **both** lockfiles (root and `demo/`): `brace-expansion`, `nanoid`, `postcss` — `npm audit` now reports 0 vulnerabilities in each
+
+### Maintenance
+
+- Updated dev dependencies to latest within range: eslint 10.8.1, happy-dom 20.11.2, react/react-dom 19.2.8, @types/react 19.2.18, vite 8.2.1, vitest 4.1.10, vue 3.5.41, vue-tsc 3.3.9, @vue/test-utils 2.4.11
+
+_No changes to shipped runtime code or public API; `src/` is identical to 0.1.5._
+
 ## 0.1.5 (2026-06-27)
 
 ### Maintenance
