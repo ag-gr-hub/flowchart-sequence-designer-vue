@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.7 (2026-08-24)
+
+### Maintenance
+
+- Updated dev dependencies to latest within range: vue-tsc 3.3.10
+
+_No changes to shipped runtime code or public API; `src/` is identical to 0.1.6._
+
 ## 0.1.6 (2026-08-09)
 
 ### Security
