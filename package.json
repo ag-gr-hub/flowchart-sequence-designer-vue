@@ -60,7 +60,7 @@
     "@vue/test-utils": "^2.4.0",
     "eslint": "^10.4.0",
     "flowchart-sequence-designer": "^1.2.4",
-    "happy-dom": "^20.9.0",
+    "happy-dom": "^21.0.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "tsup": "^8.0.0",
