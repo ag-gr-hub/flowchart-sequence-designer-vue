@@ -25,3 +25,8 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - name: Build demo
+        working-directory: demo
+        run: |
+          npm ci
+          npm run build
