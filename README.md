@@ -110,6 +110,14 @@ Both `<FsdDiagram>` and `<FsdSequence>` support Vue's v-model:
 
 When the user edits the diagram, the component emits `update:modelValue` with the new model. Vue's reactivity system keeps your parent component in sync automatically.
 
+Binding works in both directions. Assigning a different model from the parent, such as loading a saved diagram or resetting, replaces what the editor shows:
+
+```ts
+diagramModel.value = await loadDiagram(id);
+```
+
+The React editor only reads its model on mount, so a change from the parent remounts it, which **clears undo history, selection and pan/zoom**. The editor's own edits coming back through `v-model` don't remount it, even if you store a clone. Models are compared by content, so assigning an equal model does nothing.
+
 ---
 
 ## Programmatic API

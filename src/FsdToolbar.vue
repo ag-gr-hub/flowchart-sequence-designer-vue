@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import type { ComponentType } from "react";
 import type { ExportFormat } from "flowchart-sequence-designer";
 import { useReactBridge } from "./useReactBridge";
 
@@ -33,7 +34,7 @@ const getProps = () =>
 const { loading, error } = useReactBridge<ToolbarBridgeProps>(
   containerRef,
   getProps,
-  () => import("flowchart-sequence-designer/ui").then((m) => m.Toolbar as any),
+  () => import("flowchart-sequence-designer/ui").then((m) => m.Toolbar as unknown as ComponentType<ToolbarBridgeProps>),
 );
 </script>
 
