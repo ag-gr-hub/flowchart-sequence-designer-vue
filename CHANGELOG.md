@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- `v-model` on `<FsdDiagram>` and `<FsdSequence>` now works from parent to editor: assigning a different model after mount replaces the diagram. This remounts the editor, clearing undo history, selection and pan/zoom. The editor's own edits don't remount it.
+
+### Maintenance
+
+- `npm run lint` now checks `.ts` and `.vue` files (it previously matched no files and always failed) and runs in CI
+- Resolved all open security advisories across both lockfiles, including `vite`, `happy-dom`, `@vitest/mocker`, `minimatch` and `glob`; `minimatch` and `glob` are pinned via overrides
+- Updated dev dependencies, including majors: tsup 9, happy-dom 21; demo vue-tsc 3
+
 ## 0.1.7 (2026-08-24)
 
 ### Maintenance

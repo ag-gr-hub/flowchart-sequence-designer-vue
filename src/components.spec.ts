@@ -1,5 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { mount } from "@vue/test-utils";
+import type { DiagramModel } from "flowchart-sequence-designer";
 
 // Mock the dynamic imports
 vi.mock("flowchart-sequence-designer/ui", () => ({
@@ -81,7 +82,7 @@ describe("FsdStepEditor", () => {
     const wrapper = mount(FsdStepEditor, {
       props: {
         nodeId: "node-1",
-        model: { nodes: [], edges: [] } as any,
+        model: { nodes: [], edges: [] } as unknown as DiagramModel,
       },
     });
     expect(wrapper.text()).toContain("Loading editor");

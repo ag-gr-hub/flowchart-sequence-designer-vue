@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import type { ComponentType } from "react";
 import type { DiagramModel } from "flowchart-sequence-designer";
 import type { DiagramEditorProps, ThemeColors } from "flowchart-sequence-designer/ui";
 import { useReactBridge } from "./useReactBridge";
@@ -40,7 +41,7 @@ const getProps = () =>
 const { loading, error } = useReactBridge<StepEditorBridgeProps>(
   containerRef,
   getProps,
-  () => import("flowchart-sequence-designer/ui").then((m) => m.StepEditor as any),
+  () => import("flowchart-sequence-designer/ui").then((m) => m.StepEditor as unknown as ComponentType<StepEditorBridgeProps>),
 );
 </script>
 

@@ -2,6 +2,7 @@
 import { ref, computed } from "vue";
 import type { DiagramModel, ExportFormat } from "flowchart-sequence-designer";
 import type { SequenceEditorProps, ThemeColors } from "flowchart-sequence-designer/ui";
+import { useModelSync } from "./useModelSync";
 import { useReactBridge } from "./useReactBridge";
 
 const props = withDefaults(
@@ -35,10 +36,16 @@ const normalizedHeight = computed(() => {
   return "500px";
 });
 
+const { revision, noteEdit } = useModelSync(() => props.modelValue);
+
 const getProps = () =>
   ({
+    key: revision.value,
     initialModel: props.modelValue,
-    onChange: (model: DiagramModel) => emit("update:modelValue", model),
+    onChange: (model: DiagramModel) => {
+      noteEdit(model);
+      emit("update:modelValue", model);
+    },
     onExport: (format: ExportFormat, content: string | Blob) =>
       emit("export", { format, content }),
     height: "100%",
