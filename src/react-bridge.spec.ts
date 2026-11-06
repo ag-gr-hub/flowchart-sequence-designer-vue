@@ -48,10 +48,10 @@ describe("ReactBridge", () => {
   });
 
   it("should merge props on update", () => {
-    const bridge = new ReactBridge(FakeComponent, { a: 1, b: 2 } as any);
+    const bridge = new ReactBridge<{ a: number; b: number }>(FakeComponent, { a: 1, b: 2 });
     const container = document.createElement("div");
     bridge.mount(container);
-    bridge.update({ b: 3 } as any);
+    bridge.update({ b: 3 });
     // Second render call should have merged props
     expect(mockRender).toHaveBeenCalledTimes(2);
   });
