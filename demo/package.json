@@ -13,7 +13,7 @@
     "flowchart-sequence-designer": "^1.2.4",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "vue": "^3.5.0"
+    "vue": "^3.5.46"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",
